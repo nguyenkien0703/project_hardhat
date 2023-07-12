@@ -1,11 +1,8 @@
-pragma solidity ^0.8.17;
-
+pragma solidity ^0.8.0;
 import "./IERC721.sol";
 import "./IERC721Receiver.sol";
 import "./extensions/IERC721Metadata.sol";
-import "../utils/Address.sol";
 import "../utils/Context.sol";
-import "../utils/Strings.sol";
 import "../utils/ERC165.sol";
 contract CreateErc721 is Context, ERC165, IERC721, IERC721Metadata{
     string private _name ;
@@ -118,7 +115,7 @@ contract CreateErc721 is Context, ERC165, IERC721, IERC721Metadata{
    
     
     function approve(address to, uint256 tokenId) external virtual override {
-        address owner = ExmentCollection.ownerOf(tokenId);
+        address owner = CreateErc721.ownerOf(tokenId);
         require(to != owner, "ERC721: approval to current owner");
 
         require(
@@ -182,14 +179,14 @@ contract CreateErc721 is Context, ERC165, IERC721, IERC721Metadata{
             _exists(tokenId),
             "ERC721: operator query for nonexistent token"
         );
-        address owner = ExmentCollection.ownerOf(tokenId);
+        address owner = CreateErc721.ownerOf(tokenId);
         return (spender == owner || isApprovedForAll(owner, spender) || getApproved(tokenId) == spender);
     }
 
     function _transfer( address from, address to, uint256 tokenId ) internal virtual {
         require(_isTransfer, "ExmentNFT: cannot transfer");
         require(
-            ExmentCollection.ownerOf(tokenId) == from,
+            CreateErc721.ownerOf(tokenId) == from,
             "ERC721: transfer from incorrect owner"
         );
         require(to != address(0), "ERC721: transfer to the zero address");
@@ -210,7 +207,7 @@ contract CreateErc721 is Context, ERC165, IERC721, IERC721Metadata{
      function _approve(address to, uint256 tokenId) internal virtual {
         require(_isTransfer, "ExmentNFT: cannot approve");
         _tokenApprovals[tokenId] = to;
-        emit Approval(ExmentCollection.ownerOf(tokenId), to, tokenId);
+        emit Approval(CreateErc721.ownerOf(tokenId), to, tokenId);
     }
     function _setApprovalForAll( address owner, address operator, bool approved ) internal virtual {
         require(_isTransfer, "ExmentNFT: cannot approve");
