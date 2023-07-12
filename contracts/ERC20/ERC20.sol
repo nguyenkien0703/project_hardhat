@@ -24,7 +24,7 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
 
     // modifier check role 
     modifier isAdmin(){
-        require(msg.sender == admin, "only admin can call this function");
+        require(msg.sender == _admin, "only admin can call this function");
         _;
     }
     modifier isMinter(){
@@ -38,40 +38,40 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
 
     //Initialize  supplier  token start at 0 token 
     constructor (){
-        name = "Kien_dev";
-        symbol ="intern";
-        decimals= 18;
-        totalSupply =0;
-        admin = msg.sender ;
-        isPaused = false ;
+        _name = "Kien_dev";
+        _symbol ="intern";
+        _decimals= 18;
+        _totalSupply =0;
+        _admin = msg.sender ;
+       _isPaused = false ;
     }
    
     // token are mintable 
     function _mint (address account, uint value) external isMinter returns (bool) {
         require(account != address(0), "invalid account address");
-        require(totalSupply + value <= 1_000_000_000 * 10 **uint256(decimals),"minting can exceed regulation ");
-        totalSupply += value;
-        balances[account ] += value;
+        require(_totalSupply + value <= 1_000_000_000 * 10 **uint256(_decimals),"minting can exceed regulation ");
+        _totalSupply += value;
+        _balances[account ] += value;
         emit Transfer(address(0), account, value);
         return true;
     }
 
     //token are burnable 
     function _burn (uint value ) external isBurner returns (bool) {
-        require(value <= balances[msg.sender], "insufficient balance for burning " );
-        totalSupply -= value;
-        balances[msg.sender ] -= value;
+        require(value <= _balances[msg.sender], "insufficient balance for burning " );
+        _totalSupply -= value;
+        _balances[msg.sender ] -= value;
         emit Transfer(msg.sender, address(0), value);
         return true;
     }
 
 
     function pause() external isAdmin {
-        isPaused = true ;
+        _isPaused = true ;
         emit Paused();
     }
     function unpause() external isAdmin{
-        isPaused = false;
+        _isPaused = false;
         emit UnPaused();
     }
     // ===================implement functions of inteface IERC20, IERC20Metadata
@@ -102,7 +102,7 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
         return true;
     }
 
-    function allowance(address owner, address spender) internal view virtual override returns (uint256) {
+    function allowance(address owner, address spender) public view virtual override returns (uint256) {
         return _allowances[owner][spender];
     }
 
