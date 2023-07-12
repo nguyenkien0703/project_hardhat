@@ -6,7 +6,6 @@ import "../utils/Context.sol";
 import "../utils/Address.sol";
 import "../utils/ERC165.sol";
 contract CreateErc721 is Context, ERC165, IERC721, IERC721Metadata{
-    using Address for address;
     string private _name ;
     string private _symbol ;
     uint private _totalTokens;
@@ -219,7 +218,7 @@ contract CreateErc721 is Context, ERC165, IERC721, IERC721Metadata{
     }
 
     function _checkOnERC721Received( address from, address to, uint256 tokenId, bytes memory _data ) private returns (bool) {
-        if (to.isContract()) {
+        if (isContract(to)) {
             try
                 IERC721Receiver(to).onERC721Received(
                     _msgSender(),
@@ -244,9 +243,13 @@ contract CreateErc721 is Context, ERC165, IERC721, IERC721Metadata{
             return true;
         }
     }
+
     function _beforeTokenTransfer( address from, address to, uint256 tokenId ) internal virtual {}
     function _afterTokenTransfer( address from, address to, uint256 tokenId ) internal virtual {}
 
+    function isContract(address account) internal view returns (bool) {
 
+        return account.code.length > 0;
+    }
 
 }
