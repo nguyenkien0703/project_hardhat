@@ -227,7 +227,8 @@ contract CreateErc721 is Context, ERC165, IERC721, IERC721Metadata{
                     _data
                 )
             returns (bytes4 retval) {
-                return retval == IERC721Receiver.onERC721Received.selector;
+                bytes4   _ERC721_RECEIVED_SELECTOR = bytes4(keccak256("onERC721Received(address,address,uint256,bytes)"));
+                return retval == _ERC721_RECEIVED_SELECTOR;
             } catch (bytes memory reason) {
                 if (reason.length == 0) {
                     revert(
