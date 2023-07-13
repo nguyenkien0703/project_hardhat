@@ -47,7 +47,7 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
     }
    
     // token are mintable 
-    function _mint (address account, uint value) external isMinter returns (bool) {
+    function mint (address account, uint value) external isMinter returns (bool) {
         require(account != address(0), "invalid account address");
         require(_totalSupply + value <= 1_000_000_000 * 10 **uint256(_decimals),"minting can exceed regulation ");
         _totalSupply += value;
@@ -57,7 +57,7 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
     }
 
     //token are burnable 
-    function _burn (uint value ) external isBurner returns (bool) {
+    function burn (uint value ) external isBurner returns (bool) {
         require(value <= _balances[msg.sender], "insufficient balance for burning " );
         _totalSupply -= value;
         _balances[msg.sender ] -= value;
