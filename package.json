@@ -9,7 +9,7 @@
         "clean": "npx hardhat clean",
         "export:abi": "yarn run hardhat export-abi",
         "deploy:prod_mainnet": "NODE_ENV=prod hardhat run --network mainnet",
-        "deploy:dev_ethereum": "NODE_ENV=dev hardhat run --network ethereum",
+        "deploy:dev_goerli": "NODE_ENV=dev hardhat run --network goerli",
         "verify:dev_goerli": "NODE_ENV=dev hardhat verify --network goerli"
     },
     "author": "Vitoer Luu",

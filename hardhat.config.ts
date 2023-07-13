@@ -90,6 +90,5 @@ const config: HardhatUserConfig & { namedAccounts: any } = {
         tests: "test",
     },
 }
-require('nomiclabs/hardhat-waffle');
 
 export default config;

@@ -2,9 +2,9 @@ pragma solidity ^0.8.0;
 import "./IERC721.sol";
 import "./IERC721Receiver.sol";
 import "./extensions/IERC721Metadata.sol";
-import "../utils/Context.sol";
-import "../utils/Address.sol";
-import "../utils/ERC165.sol";
+import "../Utils/Context.sol";
+import "../Utils/Address.sol";
+import "../Utils/ERC165.sol";
 contract CreateErc721 is Context, ERC165, IERC721, IERC721Metadata{
     string private _name ;
     string private _symbol ;

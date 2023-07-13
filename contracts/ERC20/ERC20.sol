@@ -2,7 +2,7 @@ pragma solidity ^0.8.0;
 
 import "./IERC20.sol";
 import "./extensions/IERC20Metadata.sol";
-import "../utils/Context.sol";
+import "../Utils/Context.sol";
 contract ERC20 is Context, IERC20, IERC20Metadata {
 
     string private _name;
@@ -37,17 +37,16 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
     }
 
     //Initialize  supplier  token start at 0 token 
-    constructor (){
-        _name = "Kien_dev";
-        _symbol ="intern";
-        _decimals= 18;
+    constructor(string memory name_, string memory symbol_) {
+        _name = name_;
+        _symbol = symbol_;
         _totalSupply =0;
         _admin = msg.sender ;
        _isPaused = false ;
     }
    
     // token are mintable 
-    function mint (address account, uint value) external isMinter returns (bool) {
+    function _mint (address account, uint value) internal isMinter returns (bool) {
         require(account != address(0), "invalid account address");
         require(_totalSupply + value <= 1_000_000_000 * 10 **uint256(_decimals),"minting can exceed regulation ");
         _totalSupply += value;
