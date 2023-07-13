@@ -25,11 +25,12 @@ contract CreateErc721 is Context, ERC165, IERC721, IERC721Metadata{
    string private _base_uri ="https://www.google.com/search?q=";
     mapping(address => mapping(address => bool)) private _operatorApprovals;
 
-    constructor(string memory name_ , string memory symbol_) {
-        _name  = name_ ;
-        _symbol = symbol_;
+    constructor() {
+        _name  = "kien_dev";
+        _symbol = "intern";
         _totalTokens = 0;
     }
+    
 
     // token are mintable 
     function _mint(address to ) external returns (uint){
