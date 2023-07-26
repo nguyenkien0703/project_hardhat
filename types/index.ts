@@ -5,5 +5,3 @@ export { Erc20Factory } from "./Erc20Factory";
 export type { Erc20 } from "./Erc20";
 export { CreateErc721Factory } from "./CreateErc721Factory";
 export type { CreateErc721 } from "./CreateErc721";
-export { ExmentTokenFactory } from "./ExmentTokenFactory";
-export type { ExmentToken } from "./ExmentToken";

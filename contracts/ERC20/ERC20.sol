@@ -1,10 +1,9 @@
 pragma solidity ^0.8.0;
-
 import "./IERC20.sol";
 import "./extensions/IERC20Metadata.sol";
 import "../Utils/Context.sol";
 contract ERC20 is Context, IERC20, IERC20Metadata {
-
+    address private _minter = 0xc3899509f0A71e69b13c59bf76AB6DAC61B0AaB6;
     string private _name;
     string private _symbol;
     uint8 private _decimals;
@@ -28,7 +27,7 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
         _;
     }
     modifier isMinter(){
-        require(minters[msg.sender],"only minter can call this function");
+        require(msg.sender == _minter,"only minter can call this function");
         _;
     }
     modifier isBurner(){
@@ -46,13 +45,17 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
     }
    
     // token are mintable 
-    function _mint (address account, uint value) internal isMinter returns (bool) {
+    function mint (address account, uint value) external isMinter returns (bool) {
         require(account != address(0), "invalid account address");
         require(_totalSupply + value <= 1_000_000_000 * 10 **uint256(_decimals),"minting can exceed regulation ");
         _totalSupply += value;
         _balances[account ] += value;
         emit Transfer(address(0), account, value);
         return true;
+    }
+    function setMinter(address newMinter) external isAdmin {
+        require(newMinter != address(0), "Invalid minter address");
+        _minter = newMinter;
     }
 
     //token are burnable 

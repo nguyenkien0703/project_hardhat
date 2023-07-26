@@ -7,12 +7,13 @@ import "../Utils/Address.sol";
 import "../Utils/ERC165.sol";
 contract CreateErc721 is Context, ERC165, IERC721, IERC721Metadata{
     string private _name ;
+    // token feature 
     string private _symbol ;
-    uint private _totalTokens;
     uint256 private _price;
-
     address private _seller;
-
+    
+    
+    uint256 private _totalTokens;
     bool private _isTransfer;
 
     address public market;
@@ -22,25 +23,34 @@ contract CreateErc721 is Context, ERC165, IERC721, IERC721Metadata{
     mapping(address => uint256) private _balances;
     mapping(uint256 => address) private _tokenApprovals;
     // mapping (uint => string ) private _tokenURIs;
-   string private _base_uri ="https://www.google.com/search?q=";
+    string private _base_uri;
     mapping(address => mapping(address => bool)) private _operatorApprovals;
-
+    
     constructor() {
-        _name  = "kien_dev";
-        _symbol = "intern";
+        market = msg.sender;
         _totalTokens = 0;
+        _isTransfer= false ;
+        _base_uri="";
+    }
+
+    
+    function initialize(string memory name_, string memory symbol_, address seller_, uint256 price_) external onlyMarket {
+        _name = name_;
+        _symbol= symbol_;
+        _seller= seller_;
+        _price = price_;
     }
     
-
+    
     // token are mintable 
-    function _mint(address to ) external returns (uint){
+    function mint(address to ) external onlyMarket  returns (uint){
         uint tokenId =  _totalTokens + 1 ;
         _owners[tokenId] = to;
         _ownedTokens[to].push(tokenId);
         _totalTokens++;
         return tokenId;
     }
-
+    
     function tokenURI(uint256 tokenId) external view virtual override returns (string memory) {
         require(
             _exists(tokenId),
@@ -49,7 +59,7 @@ contract CreateErc721 is Context, ERC165, IERC721, IERC721Metadata{
         string memory baseURI = _baseURI();
         return string(abi.encodePacked(baseURI, uint2str(tokenId)));
     }
-
+    
     //convert a number => string 
     function uint2str(uint value ) internal pure returns (string memory){
         if(value == 0){
@@ -69,17 +79,20 @@ contract CreateErc721 is Context, ERC165, IERC721, IERC721Metadata{
         }
         return string (buffer);
     }
-
-// ============implement functions of interface 
-
+    
+    // ============implement functions of interface 
+    
     modifier onlyMarket() {
         require(msg.sender == market, "MARKETPLACE: FORBIDDEN");
         _;
     }
-
+    
     modifier onlySeller() {
         require(msg.sender == _seller, "SELLER: FORBIDDEN");
         _;
+    }
+    function setBaseURI() external onlySeller {
+        _base_uri = "https://www.google.com/search?q=";
     }
     function supportsInterface(bytes4 interfaceId) public view virtual override(ERC165, IERC165) returns (bool)
     {
@@ -114,7 +127,13 @@ contract CreateErc721 is Context, ERC165, IERC721, IERC721Metadata{
         return _symbol;
     }
 
-   
+    function price() public view virtual returns (uint256) {
+        return _price;
+    }
+
+    function totalSupply() public view virtual returns (uint256) {
+        return _totalTokens;
+    }
     
     function approve(address to, uint256 tokenId) external virtual override {
         address owner = CreateErc721.ownerOf(tokenId);
@@ -145,8 +164,7 @@ contract CreateErc721 is Context, ERC165, IERC721, IERC721Metadata{
     }
     
     function transferFrom( address from, address to, uint256 tokenId ) external virtual override {
-        require(
-            _isApprovedOrOwner(_msgSender(), tokenId),
+        require(_isApprovedOrOwner(_msgSender(), tokenId),
             "ERC721: transfer caller is not owner nor approved"
         );
 

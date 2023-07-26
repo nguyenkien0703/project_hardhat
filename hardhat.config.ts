@@ -19,7 +19,7 @@ dotenv.config();// goi phương thức config của thư viện dotenv để đ�
 
 const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY;
 const INFURA_API_KEY = process.env.INFURA_API_KEY;
-const DEPLOYER_PRIVATE_KEY = process.env.DEPLOYER_PRIVATE_KEY;
+export const DEPLOYER_PRIVATE_KEY = process.env.DEPLOYER_PRIVATE_KEY;
 
 const config: HardhatUserConfig & { namedAccounts: any } = {
     abiExporter: {
